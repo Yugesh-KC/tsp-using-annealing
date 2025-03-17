@@ -35,7 +35,19 @@ def main():
                 running = False
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 x, y = event.pos
-                nodes.append((x, y))
+                if event.button == 1:  # Left click to add node
+                    nodes.append((x, y))
+                elif event.button == 3:  # Right click to remove node
+                    for i, (nx, ny) in enumerate(nodes):
+                        if (nx - x) ** 2 + (ny - y) ** 2 <= 25:  # Check if click is near a node
+                            deleted_node = i + 1  # Convert index to 1-based node number
+                            nodes.pop(i)
+                            print(f"Deleted node {deleted_node} at {nx, ny}")
+                            
+                            if deleted_node in best_route:
+                                best_route = []  # Clear only if it affects the route
+                            break
+                            
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_RETURN and len(nodes) > 1:  # Only compute if we have at least 2 nodes
                     save_tsp_file(nodes)
@@ -59,9 +71,10 @@ def main():
         # Draw best route lines
         if best_route and len(best_route) > 1:
             for i in range(len(best_route) - 1):
-                start_node = nodes[best_route[i] - 1]
-                end_node = nodes[best_route[i + 1] - 1]
-                pygame.draw.line(screen, (255, 0, 0), start_node, end_node, 2)
+                if best_route[i] <= len(nodes) and best_route[i + 1] <= len(nodes):  # Avoid index errors
+                    start_node = nodes[best_route[i] - 1]
+                    end_node = nodes[best_route[i + 1] - 1]
+                    pygame.draw.line(screen, (255, 0, 0), start_node, end_node, 2)
 
         pygame.display.flip()
         clock.tick(60)
