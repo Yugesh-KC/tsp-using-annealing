@@ -1,4 +1,4 @@
-import tsplib95 #"@author of external package: Michael Ritter. Need to pip install this package"
+import 
 import random
 import math
 import time
@@ -16,7 +16,6 @@ def find_best_path(filename):
 
     def annealing(initial_state):
         
-        """Peforms simulated annealing to find a solution"""
         initial_temp = 5000
     
         alpha = 0.99
@@ -60,7 +59,6 @@ def find_best_path(filename):
         return solution, 1/get_cost(solution)
 
     def get_cost(state):
-        """Calculates cost/fitness for the solution/route."""
         distance = 0
         
         for i in range(len(state)):
@@ -75,7 +73,6 @@ def find_best_path(filename):
         return fitness
         
     def get_neighbors(state):
-        """Returns neighbor of  your solution."""
         
         neighbor = copy.deepcopy(state)
             
@@ -96,17 +93,14 @@ def find_best_path(filename):
         return neighbor 
 
     def inverse(state):
-        "Inverses the order of cities in a route between node one and node two"
     
         node_one = random.choice(state)
         new_list = list(filter(lambda city: city != node_one, state)) #route without the selected node one
         node_two = random.choice(new_list)
         state[min(node_one,node_two):max(node_one,node_two)] = state[min(node_one,node_two):max(node_one,node_two)][::-1]
-        
         return state
 
     def insert(state):
-        "Insert city at node j before node i"
         node_j = random.choice(state)
         state.remove(node_j)
         node_i = random.choice(state)
@@ -116,7 +110,6 @@ def find_best_path(filename):
         return state
 
     def swap(state):
-        "Swap cities at positions i and j with each other"
         pos_one = random.choice(range(len(state)))
         pos_two = random.choice(range(len(state)))
         state[pos_one], state[pos_two] = state[pos_two], state[pos_one]
@@ -124,7 +117,6 @@ def find_best_path(filename):
         return state
 
     def swap_routes(state):
-        "Select a subroute from a to b and insert it at another position in the route"
         subroute_a = random.choice(range(len(state)))
         subroute_b = random.choice(range(len(state)))
         subroute = state[min(subroute_a,subroute_b):max(subroute_a, subroute_b)]
